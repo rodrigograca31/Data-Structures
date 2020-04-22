@@ -14,8 +14,7 @@ class LRUCache:
         self.size = 0
         self.limit = limit
         self.dll = DoublyLinkedList()
-        self.storage = {}
-        pass
+        self.storage = dict()  # same as {}
 
     """
     Retrieves the value associated with the given key. Also
@@ -28,16 +27,8 @@ class LRUCache:
     def get(self, key):
         # print(key)
         if key in self.storage:
-            start = (self.dll.head)
-
-            while start != None:
-                if list(start.value)[0] == key:
-                    self.dll.move_to_front(start)
-                    break
-                start = start.next
-
-            # self.dll.move_to_front()
-            return self.storage[key]
+            self.dll.move_to_front(self.storage[key])
+            return self.storage[key].value[1]
         else:
             return None
 
@@ -59,30 +50,21 @@ class LRUCache:
                 self.size += 1
             else:
                 removed = self.dll.remove_from_tail()
-                # a = list(removed.keys())
-                # print("removed", (a[0]))
-                self.storage.pop(list(removed.keys())[0])
+                self.storage.pop(removed[0])
 
-            self.dll.add_to_head({key: value})
-            self.storage[key] = value
+            self.dll.add_to_head((key, value))
         else:
-            start = (self.dll.head)
+            self.storage[key].value = (key, value)
+            self.dll.move_to_front(self.storage[key])
 
-            while start != None:
-                if list(start.value)[0] == key:
-                    self.dll.move_to_front(start)
-                    break
-                start = start.next
-
-            self.storage[key] = value
-            pass
+        self.storage[key] = self.dll.head
 
 
 lru = LRUCache(limit=3)
 lru.set("aa", 1)
 lru.set("bb", 1)
 lru.set("cc", 2)
-print(lru.set("bb", 999))
+# print(lru.set("bb", 999))
 # lru.set("dd", 3)
 # lru.set("ee", 5)
 # lru.set("ff", 8)
@@ -96,13 +78,8 @@ print(lru.set("bb", 999))
 # lru.set(5, 8)
 # lru.set(6, 13)
 
-print(lru.get("ee"))
-print(lru.size)
-print(lru.storage)
+# print(lru.get("ee"))
+# print("size:", lru.size)
+# print(lru.storage)
 
 print()
-start = (lru.dll.head)
-while start != None:
-    print(start.value)
-    start = start.next
-# print(start.value)
