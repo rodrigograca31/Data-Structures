@@ -1,5 +1,9 @@
-# from dll_queue import Queue
-# from dll_stack import Stack
+
+import sys
+sys.path.append('../queue_and_stack')
+
+from dll_queue import Queue  # noqa: E402
+from dll_stack import Stack  # noqa: E402
 
 
 class BinarySearchTree:
@@ -65,6 +69,9 @@ class BinarySearchTree:
 
     # Return the maximum value found in the tree
     def get_max(self):
+        if not self:
+            return None
+
         while self.right:
             self = self.right
 
@@ -72,6 +79,9 @@ class BinarySearchTree:
 
     # Return the minimum value found in the tree
     def get_min(self):
+        if not self:
+            return None
+
         while self.left:
             self = self.left
 
@@ -98,17 +108,72 @@ class BinarySearchTree:
     # Print all the values in order from low to high
     # Hint:  Use a recursive, depth first traversal
     def in_order_print(self, node):
+        # if our node does not exist
+        if not node:
+            # just return
+            return
+
+        # left case
+        if node.left:
+            # call in order print on left node
+            self.in_order_print(node.left)
+
+        # now print the nodes value
+        print(node.value)
+
+        # right case
+        if node.right:
+            # call in order print on the right node
+            self.in_order_print(node.right)
+
         pass
 
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal
     def bft_print(self, node):
-        pass
+        # instantiate a queue
+        q = Queue()
+
+        # enqueue the starting node
+        q.enqueue(node)
+
+        # while the queue contains data
+        while q.len():
+            # dequeue current node
+            curr = q.dequeue()
+            # print the current value
+            print(curr.value)
+            # check if left child exists
+            if curr.left:
+                # enqueue left child
+                q.enqueue(curr.left)
+            # check if a right child exists
+            if curr.right:
+                # enqueue right child
+                q.enqueue(curr.right)
 
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
     def dft_print(self, node):
-        pass
+        # instantiate a stack
+        s = Stack()
+        # push the starting node
+        s.push(node)
+
+        # while the stackcontains data
+        while s.len():
+            # pop current node
+            curr = s.pop()
+            # print the current value
+            print(curr.value)
+            # check if left child exists
+            if curr.left:
+                # push left child
+                s.push(curr.left)
+            # check if a right child exists
+            if curr.right:
+                # push right child
+                s.push(curr.right)
 
     # STRETCH Goals -------------------------
     # Note: Research may be required
@@ -120,3 +185,15 @@ class BinarySearchTree:
     # Print Post-order recursive DFT
     def post_order_dft(self, node):
         pass
+
+
+# bst = BinarySearchTree(1)
+# bst.insert(8)
+# bst.insert(5)
+# bst.insert(7)
+# bst.insert(6)
+# bst.insert(3)
+# bst.insert(4)
+# bst.insert(2)
+
+# bst.bft_print(bst)
